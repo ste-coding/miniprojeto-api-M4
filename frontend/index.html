@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Waste API</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+
+
+    <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="./assets/img/logo-ewaste.png" alt="Logo">
+            </div>
+            <ul>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#api">Documentação</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>e-Waste</h1>
+            <p>Encontre pontos de coleta de resíduos eletrônicos</p>
+            <a href="#api" class="btn">Conheça a API</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="sobre" class="about">
+            <div class="about-content">
+                <h2>Sobre</h2>
+                <p>Com a e-Waste API, você localiza os pontos de coleta mais próximos, garantindo que seus dispositivos tenham um destino correto e sustentável. Projeto desenvolvido como miniprojeto avaliativo M4 da Formação FullStack da Programadores do Amanhã.</p>
+                <a href="#api" class="btn">Documentação</a>
+            </div>
+        </section>
+    
+        <section id="api" class="api">
+            <div class="api-content">
+                <h2 id="title-api">API</h2>
+                <div class="subtitulo-api">
+                    <h3>Exemplo de requisição GET 'points/city/Recife'</h2> 
+                </div>
+                <ul id="result-list"></ul>
+            </div>
+        </section>    
+    
+    </div>
+    
+    <footer id="contato" class="footer">
+        <div class="social-icons">
+            <a href="https://github.com/ste-coding" target="_blank" class="social-icon">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                GitHub
+            </a>
+            <a href="https://linkedin.com/in/stephanie-candido" target="_blank" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+                LinkedIn
+            </a>
+        </div>
+    </footer>    
+    
+    <script src="https://kit.fontawesome.com/6487e40dea.js" crossorigin="anonymous"></script>
+    <script src="./scripts/script.js"></script>
+</body>
+</html>
