@@ -1,4 +1,4 @@
-# E-waste: API de Sugestão de Programas de Reciclagem de Lixo Eletrônico
+# e-Waste: API de Sugestão de Programas de Reciclagem de Lixo Eletrônico
 
 Este projeto foi desenvolvido como parte do Módulo 4 da formação FullStack na Programadores do Amanhã. O objetivo é criar uma solução prática para o problema crescente do descarte inadequado de resíduos eletrônicos. Com o avanço da tecnologia, cada vez mais dispositivos eletrônicos são descartados, e muitos deles contêm materiais tóxicos que podem causar danos significativos ao meio ambiente e à saúde humana se não forem corretamente gerenciados.
 
