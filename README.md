@@ -1,5 +1,7 @@
 # e-Waste: API de Sugestão de Programas de Reciclagem de Lixo Eletrônico
 
+visite o site em: https://main--ewaste-api.netlify.app/
+
 Este projeto foi desenvolvido como parte do Módulo 4 da formação FullStack na Programadores do Amanhã. O objetivo é criar uma solução prática para o problema crescente do descarte inadequado de resíduos eletrônicos. Com o avanço da tecnologia, cada vez mais dispositivos eletrônicos são descartados, e muitos deles contêm materiais tóxicos que podem causar danos significativos ao meio ambiente e à saúde humana se não forem corretamente gerenciados.
 
 A e-Waste API busca facilitar o processo de descarte de resíduos eletrônicos, permitindo que empresas e indivíduos localizem facilmente pontos de coleta onde esses itens podem ser deixados para reciclagem ou descarte seguro. A API serve como um intermediário, conectando doadores de lixo eletrônico com centros de coleta certificados, garantindo que os resíduos sejam tratados de forma adequada.
