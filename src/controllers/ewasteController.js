@@ -1,102 +1,141 @@
-const Joi = require('joi');
-const fs = require('fs');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
-const RecyclingPoint = require('../models/ewasteModel.js');
+import { Low } from 'lowdb';
+import { JSONFile } from 'lowdb/node';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import Joi from 'joi';
+import { v4 as uuidv4 } from 'uuid';
+import RecyclingPoint from '../models/ewasteModel.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const dataPath = path.resolve(__dirname, '../db.json');
 
-const getAllPoints = (req, res) => {
+const adapter = new JSONFile(dataPath);
+const defaultData = { recyclingPoints: [] };
+const db = new Low(adapter, defaultData);
+
+
+const getAllPoints = async (req, res) => {
     try {
-        const points = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-        res.status(200).json(points);
+        await db.read();
+        res.status(200).json(db.data.recyclingPoints);
     } catch (err) {
+        console.error('Erro ao buscar pontos de coleta:', err);
         res.status(500).json({ message: 'Erro ao buscar pontos de coleta.' });
     }
 };
 
-// pontos de coleta por cidade
-const getPointsByCity = (req, res) => {
+
+const getPointsByCity = async (req, res) => {
     const city = req.params.city;
     try {
-        const points = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-        const filteredPoints = points.filter(point => point.city.toLowerCase() === city.toLowerCase());
+        await db.read();
+        const filteredPoints = db.data.recyclingPoints.filter(point => point.city.toLowerCase() === city.toLowerCase());
         res.status(200).json(filteredPoints);
     } catch (err) {
+        console.error('Erro ao buscar pontos de coleta por cidade:', err);
         res.status(500).json({ message: 'Erro ao buscar pontos de coleta por cidade.' });
     }
 };
 
-// pontos de coleta por tipo de ewaste
-const getPointsByType = (req, res) => {
+
+
+const getPointsByType = async (req, res) => {
     const type = req.params.type;
     try {
-        const points = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-        const filteredPoints = points.filter(point => point.type.toLowerCase() === type.toLowerCase());
+        await db.read();
+        const filteredPoints = db.data.recyclingPoints.filter(point => point.type.toLowerCase() === type.toLowerCase());
         res.status(200).json(filteredPoints);
     } catch (err) {
+        console.error('Erro ao buscar pontos de coleta por tipo de resíduo:', err);
         res.status(500).json({ message: 'Erro ao buscar pontos de coleta por tipo de resíduo.' });
     }
 };
 
-// adicionar ponto de coleta
-const addPoint = (req, res) => {
+
+
+const addPoint = async (req, res) => {
     const { error } = addPointSchema.validate(req.body);
 
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
     }
 
-    const { name, city, type } = req.body;
-    const newPoint = new RecyclingPoint(name, city, type);
+    const { name, city, type, street_address, contact } = req.body;
+    const newPoint = new RecyclingPoint(name, city, type, street_address, contact);
 
     try {
-        let points = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-        
-        newPoint.id = uuidv4();
-
-        points.push(newPoint);
-        fs.writeFileSync(dataPath, JSON.stringify(points, null, 2));
+        await db.read();
+        db.data.recyclingPoints.push(newPoint);
+        await db.write();
         res.status(201).json(newPoint);
     } catch (err) {
+        console.error('Erro ao adicionar ponto de coleta:', err);
         res.status(500).json({ message: 'Erro ao adicionar ponto de coleta.' });
     }
 };
 
-// deletar ponto de coleta
-const deletePoint = (req, res) => {
+
+const deletePoint = async (req, res) => {
     const { id } = req.params;
 
     try {
-        let points = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-        const index = points.findIndex(point => point.id === id);
-        
+        await db.read();
+        const index = db.data.recyclingPoints.findIndex(point => point.id === id);
+
         if (index === -1) {
             return res.status(404).json({ message: 'Ponto de coleta não encontrado.' });
         }
 
-        const deletedPoint = points.splice(index, 1)[0];
-        fs.writeFileSync(dataPath, JSON.stringify(points, null, 2));
+        const deletedPoint = db.data.recyclingPoints.splice(index, 1)[0];
+        await db.write();
         res.json(deletedPoint);
     } catch (err) {
+        console.error('Erro ao deletar ponto de coleta:', err);
         res.status(500).json({ message: 'Erro ao deletar ponto de coleta.' });
     }
 };
 
-//validação para adicionar ponto de coleta
+
+const updatePoint = async (req, res) => {
+    const { id } = req.params;
+    const { error } = addPointSchema.validate(req.body);
+
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+
+    try {
+        await db.read();
+        const index = db.data.recyclingPoints.findIndex(point => point.id === id);
+
+        if (index === -1) {
+            return res.status(404).json({ message: 'Ponto de coleta não encontrado.' });
+        }
+
+        db.data.recyclingPoints[index] = { id, ...req.body };
+        await db.write();
+        res.status(200).json(db.data.recyclingPoints[index]);
+    } catch (err) {
+        console.error('Erro ao atualizar ponto de coleta:', err);
+        res.status(500).json({ message: 'Erro ao atualizar ponto de coleta.' });
+    }
+};
+
+
 const addPointSchema = Joi.object({
     name: Joi.string().required(),
     city: Joi.string().required(),
     type: Joi.string().valid('baterias', 'computadores', 'celulares', 'televisores').required(),
     street_address: Joi.string().required(),
     contact: Joi.string().required()
-
 });
 
-module.exports = {
+export {
     getAllPoints,
     getPointsByCity,
     getPointsByType,
     addPoint,
-    deletePoint
+    deletePoint,
+    updatePoint
 };
