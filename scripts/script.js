@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const city = 'Recife';
-    fetch(`http://localhost:3000/points/city/${city}`)
+    const endpoint = `http://localhost:3000/recycling-points/city/${encodeURIComponent(city)}`;
+
+    fetch(endpoint)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
