@@ -2,7 +2,8 @@
   "name": "miniprojeto-api-m4",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
     "build": "webpack --mode production",
@@ -16,6 +17,7 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "joi": "^17.13.3",
+    "lowdb": "^7.0.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^10.0.0"

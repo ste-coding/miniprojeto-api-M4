@@ -1,6 +1,12 @@
-[
-    { "id": "f7b92797-1c1d-4f7c-8598-7ff6128194f1", "name": "Ponto de Coleta A", "city": "Recife", "type": "baterias", "street_address": "Rua do Apolo, 235", "contact": "(81) 99999-9999" },
-    { "id": "5d94c3e2-7b0e-4d82-907e-8e60f1c48b6a", "name": "Ponto de Coleta B", "city": "São Paulo", "type": "computadores", "street_address": "Avenida Paulista, 1578", "contact": "(11) 98888-8888" },
-    { "id": "d76f8f43-1b8e-4f0f-ba22-eeaa9f2ed82b", "name": "Ponto de Coleta C", "city": "Recife", "type": "celulares", "street_address": "Rua da Aurora, 123", "contact": "(81) 97777-7777" },
-    { "id": "f2c7c7de-1f34-448f-98e8-1c43a08c41d6", "name": "Ponto de Coleta D", "city": "Rio de Janeiro", "type": "televisores", "street_address": "Rua do Ouvidor, 50", "contact": "(21) 96666-6666" }
-]
+{
+  "recyclingPoints": [
+    {
+      "id": "b41f2d65-c610-4c0a-9beb-0dd391e06b13",
+      "name": "Ponto de Coleta A",
+      "city": "Recife",
+      "type": "baterias",
+      "street_address": "Rua do Apolo, 225",
+      "contact": "(81) 99999-9999"
+    }
+  ]
+}
