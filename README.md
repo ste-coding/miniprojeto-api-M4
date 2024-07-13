@@ -1,25 +1,41 @@
 # e-Waste: API de Sugestão de Programas de Reciclagem de Lixo Eletrônico
 
-visite o site em: https://main--ewaste-api.netlify.app/
+Visite o website: https://ewaste-api-m4.netlify.app/
 
-Este projeto foi desenvolvido como parte do Módulo 4 da formação FullStack na Programadores do Amanhã. O objetivo é criar uma solução prática para o problema crescente do descarte inadequado de resíduos eletrônicos. Com o avanço da tecnologia, cada vez mais dispositivos eletrônicos são descartados, e muitos deles contêm materiais tóxicos que podem causar danos significativos ao meio ambiente e à saúde humana se não forem corretamente gerenciados.
+A API e-Waste foi desenvolvida para gerenciar pontos de coleta de resíduos eletrônicos, facilitando o acesso e a gestão desses locais para usuários e administradores. O projeto visa contribuir para a sustentabilidade ambiental, incentivando o descarte correto de eletrônicos.
 
-A e-Waste API busca facilitar o processo de descarte de resíduos eletrônicos, permitindo que empresas e indivíduos localizem facilmente pontos de coleta onde esses itens podem ser deixados para reciclagem ou descarte seguro. A API serve como um intermediário, conectando doadores de lixo eletrônico com centros de coleta certificados, garantindo que os resíduos sejam tratados de forma adequada.
+Este projeto foi desenvolvido como parte do Módulo 4 da formação FullStack do Instituto Programadores do Amanhã.
 
 ## Funcionalidades
 
-- Listar todos os pontos de coleta de lixo eletrônico.
-- Filtrar pontos de coleta por cidade.
-- Filtrar pontos de coleta por tipo de eletrônico.
-- Adicionar novos pontos de coleta.
-- Remover pontos de coleta existentes.
+- Listagem de Pontos de Coleta:
+    - Recuperar todos os pontos de coleta cadastrados.
+    - Filtrar pontos de coleta por cidade.
+    - Filtrar pontos de coleta por tipo de resíduo eletrônico.
+
+- Cadastro, Atualização e Remoção de Pontos de Coleta:
+    - Adicionar um novo ponto de coleta.
+    - Atualizar informações de um ponto de coleta existente.
+    - Remover um ponto de coleta.
 
 ## Tecnologias Utilizadas
 
 - Node.js
 - Express
 - JavaScript
-- UUID para geração de IDs únicos
+- Swagger (para documentação)
+- Joi (para validação de dados)
+- Lowdb (para simulação de banco de dados em JSON)
+- UUID (para geração de IDs únicos)
+
+## Modelo de Dados
+O modelo RecyclingPoint utilizado na API possui as seguintes propriedades:
+
+- name: Nome do ponto de coleta.
+- city: Cidade onde o ponto de coleta está localizado.
+- type: Tipo de resíduo eletrônico que o ponto de coleta aceita (por exemplo, baterias, computadores, celulares, televisores).
+- street_address: Endereço físico do ponto de coleta.
+- contact: Informações de contato para o ponto de coleta (telefone).
 
 ## Configuração do Projeto
 
@@ -38,33 +54,17 @@ A e-Waste API busca facilitar o processo de descarte de resíduos eletrônicos, 
 2. Instale as dependências
 
     ```bash
-    npm install express joi uuid cors
+    npm install
 
 3. Para iniciar o servidor de desenvolvimento, use:
     ```bash
     npm run dev
 
 
-### Uso da API
-- Listar Todos os Pontos de Coleta
+### Documentação Swagger
+O Swagger foi configurado automaticamente a partir dos endpoints definidos no arquivo ewasteRoutes.js. Para visualizar a configuração completa, consulte o arquivo swaggerConfig.js.
 
-    **GET: /recycling-points** - Retorna todos os pontos de coleta de lixo eletrônico.
-
-- Filtrar Pontos de Coleta por Cidade
-
-    **GET: /recycling-points/city/{city}** - Filtra os pontos de coleta pela cidade especificada.
-
-- Filtrar Pontos de Coleta por Tipo de Eletrônico
-
-    **GET: /recycling-points/type/{type}** - Filtra os pontos de coleta pelo tipo de eletrônico especificado.
-
-- Adicionar Novo Ponto de Coleta
-
-    **POST /recycling-points** - Adiciona um novo ponto de coleta. Deve incluir no corpo da requisição o nome, cidade e tipo de eletrônico do ponto de coleta.
-
-- Remover Ponto de Coleta
-
-    **DELETE /recycling-points/{id}** - Remove o ponto de coleta com o ID especificado.
+Documentação também acessível em: https://swagger-documentation-ewaste.netlify.app/
 
 ## Estrutura do Projeto
 
@@ -76,4 +76,8 @@ A e-Waste API busca facilitar o processo de descarte de resíduos eletrônicos, 
 
 **src/models/recyclingPoints.model.js**: Define a estrutura dos dados dos pontos de coleta. Utiliza uma classe para representar os pontos de coleta e métodos para manipulação desses dados.
 
-**src/db.json**: Arquivo de banco de dados simulado, onde os dados dos pontos de coleta são armazenados localmente em formato JSON.
+**src/db.json**: Arquivo de banco de dados simulado, onde os dados dos pontos de coleta são armazenados localmente em formato JSON, por meio do lowdb.
+
+**assets/**: Contém arquivo css e imagens usadas na landing page de apresentação do projeto
+
+**index.html**: Arquivo base da landing page
