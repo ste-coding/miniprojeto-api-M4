@@ -14,18 +14,29 @@ const adapter = new JSONFile(dataPath);
 const defaultData = { recyclingPoints: [] };
 const db = new Low(adapter, defaultData);
 
+const readDatabase = async () => {
+    await db.read();
+};
+
+const writeDatabase = async () => {
+    await db.write();
+};
+
+const addLinksToRecyclingPoint = (point) => {
+    return {
+        ...point,
+        links: [
+            { rel: 'self', href: `${baseUrl}/recycling-points/${point.id}` },
+            { rel: 'update', href: `${baseUrl}/recycling-points/${point.id}`, method: 'PUT' },
+            { rel: 'delete', href: `${baseUrl}/recycling-points/${point.id}`, method: 'DELETE' }
+        ]
+    };
+};
 
 const getAllPoints = async (req, res) => {
     try {
-        await db.read();
-        const pointsWithLinks = db.data.recyclingPoints.map(point => ({
-            ...point,
-            links: [
-                { rel: 'self', href: `${baseUrl}/recycling-points/${point.id}` },
-                { rel: 'update', href: `${baseUrl}/recycling-points/${point.id}`, method: 'PUT' },
-                { rel: 'delete', href: `${baseUrl}/recycling-points/${point.id}`, method: 'DELETE' }
-            ]
-        }));
+        await readDatabase();
+        const pointsWithLinks = db.data.recyclingPoints.map(addLinksToRecyclingPoint);
         res.status(200).json(pointsWithLinks);
     } catch (err) {
         console.error('Erro ao buscar pontos de coleta:', err);
@@ -33,15 +44,17 @@ const getAllPoints = async (req, res) => {
     }
 };
 
-export const getPointById = async (req, res) => {
+const getPointById = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const point = await RecyclingPoint.findById(id);
+        await readDatabase();
+        const point = db.data.recyclingPoints.find(point => point.id === id);
         if (!point) {
             return res.status(404).json({ message: 'Ponto de coleta não encontrado.' });
         }
-        res.status(200).json(point);
+        const pointWithLinks = addLinksToRecyclingPoint(point);
+        res.status(200).json(pointWithLinks);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -50,16 +63,9 @@ export const getPointById = async (req, res) => {
 const getPointsByCity = async (req, res) => {
     const city = req.params.city;
     try {
-        await db.read();
+        await readDatabase();
         const filteredPoints = db.data.recyclingPoints.filter(point => point.city.toLowerCase() === city.toLowerCase());
-        const pointsWithLinks = filteredPoints.map(point => ({
-            ...point,
-            links: [
-                { rel: 'self', href: `${baseUrl}/recycling-points/${point.id}` },
-                { rel: 'update', href: `${baseUrl}/recycling-points/${point.id}`, method: 'PUT' },
-                { rel: 'delete', href: `${baseUrl}/recycling-points/${point.id}`, method: 'DELETE' }
-            ]
-        }));
+        const pointsWithLinks = filteredPoints.map(addLinksToRecyclingPoint);
         res.status(200).json(pointsWithLinks);
     } catch (err) {
         console.error('Erro ao buscar pontos de coleta por cidade:', err);
@@ -70,16 +76,9 @@ const getPointsByCity = async (req, res) => {
 const getPointsByType = async (req, res) => {
     const type = req.params.type;
     try {
-        await db.read();
+        await readDatabase();
         const filteredPoints = db.data.recyclingPoints.filter(point => point.type.toLowerCase() === type.toLowerCase());
-        const pointsWithLinks = filteredPoints.map(point => ({
-            ...point,
-            links: [
-                { rel: 'self', href: `${baseUrl}/recycling-points/${point.id}` },
-                { rel: 'update', href: `${baseUrl}/recycling-points/${point.id}`, method: 'PUT' },
-                { rel: 'delete', href: `${baseUrl}/recycling-points/${point.id}`, method: 'DELETE' }
-            ]
-        }));
+        const pointsWithLinks = filteredPoints.map(addLinksToRecyclingPoint);
         res.status(200).json(pointsWithLinks);
     } catch (err) {
         console.error('Erro ao buscar pontos de coleta por tipo de resíduo:', err);
@@ -98,11 +97,12 @@ const addPoint = async (req, res) => {
     const newPoint = new RecyclingPoint(name, city, type, street_address, contact);
 
     try {
-        await db.read();
+        await readDatabase();
         db.data.recyclingPoints.push(newPoint);
         await db.write();
+        const pointWithLinks = addLinksToRecyclingPoint(newPoint);
         const location = `${baseUrl}/recycling-points/${newPoint.id}`;
-        res.status(201).header('Location', location).json(newPoint);
+        res.status(201).header('Location', location).json(pointWithLinks);
     } catch (err) {
         console.error('Erro ao adicionar ponto de coleta:', err);
         res.status(500).json({ message: 'Erro ao adicionar ponto de coleta.' });
@@ -113,7 +113,7 @@ const deletePoint = async (req, res) => {
     const { id } = req.params;
 
     try {
-        await db.read();
+        await readDatabase();
         const index = db.data.recyclingPoints.findIndex(point => point.id === id);
 
         if (index === -1) {
@@ -122,7 +122,8 @@ const deletePoint = async (req, res) => {
 
         const deletedPoint = db.data.recyclingPoints.splice(index, 1)[0];
         await db.write();
-        res.json(deletedPoint);
+        const pointWithLinks = addLinksToRecyclingPoint(deletedPoint);
+        res.json(pointWithLinks);
     } catch (err) {
         console.error('Erro ao deletar ponto de coleta:', err);
         res.status(500).json({ message: 'Erro ao deletar ponto de coleta.' });
@@ -138,7 +139,7 @@ const updatePoint = async (req, res) => {
     }
 
     try {
-        await db.read();
+        await readDatabase();
         const index = db.data.recyclingPoints.findIndex(point => point.id === id);
 
         if (index === -1) {
@@ -147,7 +148,8 @@ const updatePoint = async (req, res) => {
 
         db.data.recyclingPoints[index] = { id, ...req.body };
         await db.write();
-        res.status(200).json(db.data.recyclingPoints[index]);
+        const updatedPoint = addLinksToRecyclingPoint(db.data.recyclingPoints[index]);
+        res.status(200).json(updatedPoint);
     } catch (err) {
         console.error('Erro ao atualizar ponto de coleta:', err);
         res.status(500).json({ message: 'Erro ao atualizar ponto de coleta.' });
@@ -164,6 +166,7 @@ const addPointSchema = Joi.object({
 
 export {
     getAllPoints,
+    getPointById,
     getPointsByCity,
     getPointsByType,
     addPoint,
