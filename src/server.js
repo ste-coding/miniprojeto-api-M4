@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import errorHandler from './utils/errorHandler.js';
-import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './utils/swaggerConfig.js';
+import swaggerUi from 'swagger-ui-express';
 
 import recyclingRoutes from './routes/ewasteRoutes.js';
 
