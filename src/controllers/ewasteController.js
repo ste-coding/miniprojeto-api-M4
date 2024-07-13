@@ -33,6 +33,20 @@ const getAllPoints = async (req, res) => {
     }
 };
 
+export const getPointById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const point = await RecyclingPoint.findById(id);
+        if (!point) {
+            return res.status(404).json({ message: 'Ponto de coleta não encontrado.' });
+        }
+        res.status(200).json(point);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const getPointsByCity = async (req, res) => {
     const city = req.params.city;
     try {

@@ -1,6 +1,6 @@
 // ewasteRoutes.js
 import { Router } from 'express';
-import { getAllPoints, getPointsByCity, getPointsByType, addPoint, deletePoint, updatePoint } from '../controllers/ewasteController.js';
+import { getAllPoints,getPointById, getPointsByCity, getPointsByType, addPoint, deletePoint, updatePoint } from '../controllers/ewasteController.js';
 
 const router = Router();
 
@@ -23,6 +23,26 @@ const router = Router();
  */
 
 router.get('/recycling-points', getAllPoints);
+
+/**
+ * @swagger
+ * /recycling-points/{id}:
+ *   get:
+ *     summary: Retorna um ponto de coleta por ID
+ *     tags: [Recycling Points]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do ponto de coleta
+ *     responses:
+ *       '200':
+ *         description: OK
+ */
+
+router.get('/recycling-points/:id', getPointById);
 
 /**
  * @swagger
