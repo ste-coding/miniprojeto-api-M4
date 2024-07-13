@@ -187,6 +187,11 @@ nav ul li a:hover {
 
 .api .subtitulo-api p {
     color: #ffffff;
+    font-size: 1.125rem;
+    font-family: 'Fira Code';
+    font-weight: 500;
+    line-height: 2.25rem;
+    letter-spacing: -0.015rem;
     margin-bottom: 2rem;
 }
 
