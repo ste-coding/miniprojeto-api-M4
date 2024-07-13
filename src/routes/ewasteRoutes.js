@@ -1,65 +1,34 @@
+// ewasteRoutes.js
+import { Router } from 'express';
+import { getAllPoints, getPointsByCity, getPointsByType, addPoint, deletePoint, updatePoint } from '../controllers/ewasteController.js';
+
+const router = Router();
+
 /**
  * @swagger
  * tags:
  *   name: Recycling Points
- *   description: API endpoints for managing recycling points
+ *   description: API para gerenciar pontos de coleta de resíduos eletrônicos
  */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     RecyclingPoint:
- *       type: object
- *       required:
- *         - name
- *         - city
- *         - type
- *         - street_address
- *         - contact
- *       properties:
- *         id:
- *           type: string
- *         name:
- *           type: string
- *         city:
- *           type: string
- *         type:
- *           type: string
- *         street_address:
- *           type: string
- *         contact:
- *           type: string
- */
-
-import express from 'express';
-import { getAllPoints, getPointsByCity, getPointsByType, addPoint, deletePoint, updatePoint } from '../controllers/ewasteController.js';
-
-const router = express.Router();
 
 /**
  * @swagger
  * /recycling-points:
  *   get:
- *     summary: Retrieve all recycling points
+ *     summary: Retorna todos os pontos de coleta
  *     tags: [Recycling Points]
  *     responses:
  *       '200':
- *         description: A list of recycling points
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/RecyclingPoint'
+ *         description: OK
  */
+
 router.get('/recycling-points', getAllPoints);
 
 /**
  * @swagger
  * /recycling-points/city/{city}:
  *   get:
- *     summary: Retrieve recycling points by city
+ *     summary: Retorna pontos de coleta por cidade
  *     tags: [Recycling Points]
  *     parameters:
  *       - in: path
@@ -67,24 +36,19 @@ router.get('/recycling-points', getAllPoints);
  *         required: true
  *         schema:
  *           type: string
- *         description: City name
+ *         description: Nome da cidade
  *     responses:
  *       '200':
- *         description: A list of recycling points
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/RecyclingPoint'
+ *         description: OK
  */
+
 router.get('/recycling-points/city/:city', getPointsByCity);
 
 /**
  * @swagger
  * /recycling-points/type/{type}:
  *   get:
- *     summary: Retrieve recycling points by type of waste
+ *     summary: Retorna pontos de coleta por tipo
  *     tags: [Recycling Points]
  *     parameters:
  *       - in: path
@@ -92,49 +56,38 @@ router.get('/recycling-points/city/:city', getPointsByCity);
  *         required: true
  *         schema:
  *           type: string
- *           enum: [baterias, computadores, celulares, televisores]
- *         description: Type of electronic waste
+ *         description: Tipo de resíduo eletrônico
  *     responses:
  *       '200':
- *         description: A list of recycling points
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/RecyclingPoint'
+ *         description: OK
  */
+
 router.get('/recycling-points/type/:type', getPointsByType);
 
 /**
  * @swagger
- * /api/recycling-points:
+ * /recycling-points:
  *   post:
- *     summary: Add a new recycling point
+ *     summary: Adiciona um novo ponto de coleta
  *     tags: [Recycling Points]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RecyclingPoint'
+ *             $ref: '#/definitions/RecyclingPoint'
  *     responses:
  *       '201':
  *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/RecyclingPoint'
- *       '400':
- *         description: Bad Request
  */
+
 router.post('/recycling-points', addPoint);
 
 /**
  * @swagger
  * /recycling-points/{id}:
  *   delete:
- *     summary: Delete a recycling point
+ *     summary: Remove um ponto de coleta existente
  *     tags: [Recycling Points]
  *     parameters:
  *       - in: path
@@ -142,23 +95,19 @@ router.post('/recycling-points', addPoint);
  *         required: true
  *         schema:
  *           type: string
+ *         description: ID do ponto de coleta a ser removido
  *     responses:
- *       '200':
- *         description: Deleted
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/RecyclingPoint'
- *       '404':
- *         description: Not Found
+ *       '204':
+ *         description: No Content
  */
+
 router.delete('/recycling-points/:id', deletePoint);
 
 /**
  * @swagger
  * /recycling-points/{id}:
  *   put:
- *     summary: Update a recycling point
+ *     summary: Atualiza um ponto de coleta existente
  *     tags: [Recycling Points]
  *     parameters:
  *       - in: path
@@ -166,24 +115,18 @@ router.delete('/recycling-points/:id', deletePoint);
  *         required: true
  *         schema:
  *           type: string
+ *         description: ID do ponto de coleta a ser atualizado
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RecyclingPoint'
+ *             $ref: '#/definitions/RecyclingPoint'
  *     responses:
  *       '200':
- *         description: Updated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/RecyclingPoint'
- *       '400':
- *         description: Bad Request
- *       '404':
- *         description: Not Found
+ *         description: OK
  */
+
 router.put('/recycling-points/:id', updatePoint);
 
 export default router;

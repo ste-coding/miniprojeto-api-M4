@@ -22,7 +22,7 @@ const swaggerDefinition = {
 
 const options = {
     swaggerDefinition,
-    apis: [join(__dirname, '../routes/ewasteRoutes.js')]
+    apis: [join(__dirname, '../routes/*.js')]
 };
 
 const swaggerSpec = swaggerJSDoc(options);
