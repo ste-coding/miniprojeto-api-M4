@@ -17,12 +17,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-
+app.use(errorHandler);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/', recyclingRoutes);
-
-app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server is running on PORT ${port}`);

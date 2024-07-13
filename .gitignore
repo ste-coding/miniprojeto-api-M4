@@ -3,3 +3,6 @@ todo.md
 
 # Diretório de dependências Node.js
 node_modules/
+
+#scripts
+scripts/
