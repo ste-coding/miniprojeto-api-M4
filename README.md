@@ -1,4 +1,5 @@
-# e-Waste: API de Sugestão de Programas de Reciclagem de Lixo Eletrônico
+![e-Waste Logo](./assets/img/logo-ewaste.png) 
+# e-Waste: API de Sugestão de Pontos de Coleta de Lixo Eletrônico
 
 Visite o website: https://ewaste-api-m4.netlify.app/
 
